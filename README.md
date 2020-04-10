@@ -227,3 +227,32 @@ function findBstHeight(tree) {
 }
 ```
 
+## 6. Is it a BST?
+Write an algorithm to check whether an arbitrary binary tree is a binary search tree, assuming the tree does not contain duplicates.
+
+```js
+function isBst(tree) {
+  if (tree === null) {
+    return true;
+  }
+
+  if (tree.left && tree.left.key > tree.key) {
+    return false;
+  }
+  if (tree.right && tree.right.key < tree.key) {
+    return false;
+  }
+
+  let left = isBst(tree.left);
+  let right = isBst(tree.right);
+
+  return left && right;
+}
+// Use the next line to force BST into a non-valid binary tree
+// BST.left = new BinarySearchTree(5)
+isBst(BST)
+```
+
+## 7. 3rd largest node
+Write an algorithm to find the 3rd largest node in a binary search tree.
+
