@@ -202,4 +202,28 @@ function tree(t){
 ```
 
 > This function prints a flattened tree
+
 > Runtime: O(n) as the function is called for every node in the tree
+
+## 5. Height of a BST
+Write an algorithm to find the height of a binary search tree. What is the time complexity of your algorithm?
+
+```js
+function findBstHeight(tree) {
+  // The function will inevitably be O(n) because we have to check every node to see if it chains further than every other node.
+
+  if (tree === null) {
+    return -1;
+  }
+
+  let left = findBstHeight(tree.left);
+  let right = findBstHeight(tree.right);
+
+  if (left > right) {
+    return left + 1;
+  } else {
+    return right + 1;
+  }
+}
+```
+
