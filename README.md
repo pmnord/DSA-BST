@@ -256,3 +256,16 @@ isBst(BST)
 ## 7. 3rd largest node
 Write an algorithm to find the 3rd largest node in a binary search tree.
 
+```js
+// First method: traverse the tree and generate an ordered array, then look up by index
+function thirdLargestNode(tree) {
+  let flatTree = displayBST(tree);
+  let orderedTreeArray = flatTree.split('')
+
+  return orderedTreeArray[orderedTreeArray.length - 3]
+}
+thirdLargestNode(BST)
+
+// Another method would be to do reversed in-order tree traversal
+```
+
