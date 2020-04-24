@@ -18,6 +18,8 @@ Walk through the binary search tree code in the curriculum and understand it wel
 - Create a binary search tree called BST and insert 3,1,4,6,9,2,5,7 into your tree. Compare your result with the result from the 1st exercise.
 - Create a binary search tree called BST and insert E A S Y Q U E S T I O N into your tree. Compare your result with the result from the 1st exercise.
 
+<details><summary><b>See Solution</b></summary>
+
 ```js
 class BinarySearchTree {
   constructor(key=null, value=null, parent=null) {
@@ -189,6 +191,8 @@ BST2.insert('N')
 console.log(BST2)
 ```
 
+</details>
+
 ## 4. What does this program do?
 Without running this code in your code editor, explain what the following program does. Show with an example the result of executing this program. What is the runtime of this algorithm?
 
@@ -201,8 +205,7 @@ function tree(t){
 }
 ```
 
-> This function prints a flattened tree
-
+> This function recursively sums every element in a tree
 > Runtime: O(n) as the function is called for every node in the tree
 
 ## 5. Height of a BST
@@ -210,8 +213,6 @@ Write an algorithm to find the height of a binary search tree. What is the time 
 
 ```js
 function findBstHeight(tree) {
-  // The function will inevitably be O(n) because we have to check every node to see if it chains further than every other node.
-
   if (tree === null) {
     return -1;
   }
@@ -226,6 +227,7 @@ function findBstHeight(tree) {
   }
 }
 ```
+> The function will inevitably be O(n) because we have to iterate down every branch to see if it chains further than every other branch
 
 ## 6. Is it a BST?
 Write an algorithm to check whether an arbitrary binary tree is a binary search tree, assuming the tree does not contain duplicates.
@@ -248,8 +250,6 @@ function isBst(tree) {
 
   return left && right;
 }
-// Use the next line to force BST into a non-valid binary tree
-// BST.left = new BinarySearchTree(5)
 isBst(BST)
 ```
 
@@ -269,3 +269,98 @@ thirdLargestNode(BST)
 // Another method would be to do reversed in-order tree traversal
 ```
 
+## 8. Balanced BST
+Write an algorithm that checks if a BST is balanced (i.e., a tree where no 2 leaves differ in distance from the root by more than 1).
+
+```js
+function isBalanced(tree) {
+  if (tree === null) {
+    return true;
+  }
+
+  if (
+      tree.left 
+      && (tree.left.left || tree.left.right) 
+      && !tree.right
+    ) {
+    return false;
+  }
+  if (
+      tree.right 
+      && (tree.right.left || tree.right.right) 
+      && !tree.left
+    ) {
+    return false;
+  }
+
+  let left = isBalanced(tree.left);
+  let right = isBalanced(tree.right);
+
+  return left && right;
+}
+isBalanced(BST)
+```
+
+## 9. Are they the same BSTs?
+You are given two arrays which represent two sequences of keys that are used to create two binary search trees. Write a program that will tell whether the two BSTs will be identical or not without actually constructing the tree. You may use another data structure such as an array or a linked list but don't construct the BST. What is the time complexity of your algorithm? E.g., 3, 5, 4, 6, 1, 0, 2 and 3, 1, 5, 2, 4, 6, 0 are two sequences of arrays but will create the exact same BSTs and your program should return true.
+
+```js
+function sameBSTs(arr1, arr2) {
+  // The first two items must be the same, 3 in the example case
+  // If the next item in the array that is greater than 3 is not the same in each dataset
+  // Or the next item in the array that is less than 3 is not the same in each dataset
+  // Then the trees are not the same
+  // Call the function again recursively for each subset of elements as the tree branches
+
+  if (arr1[0] !== arr2[0]) {
+    console.log('roots are not the same')
+    return false;
+  }
+  if (arr1.length !== arr2.length) {
+      console.log('trees are not the same size')
+      return false;
+  }
+
+  const nextLeft1 = nextLowerIndex(arr1);
+  const nextLeft2 = nextLowerIndex(arr2);
+  if ((nextLeft1 && nextLeft2) && arr1[nextLeft1] !== arr2[nextLeft2]) {return false}
+
+  const nextRight1 = nextHigherIndex(arr1);
+  const nextRight2 = nextHigherIndex(arr2);
+  if ((nextRight1 && nextRight2) && arr1[nextRight1] !== arr2[nextRight2]) {return false}
+
+  let left = true;
+  let right = true;
+
+  if (nextLeft1 && nextLeft2) {
+    left = sameBSTs(arr1.filter(i => i < arr2[0]), arr2.filter(i => i < arr2[0]));
+  }
+  if (nextRight1 && nextRight2) {
+    right = sameBSTs(arr1.filter(i => i > arr1[0]), arr2.filter(i => i > arr2[0]));
+  }
+
+  return true && left && right;
+}
+
+function nextLowerIndex(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] < arr[0]) {
+      return i;
+    }
+  }
+  return null;
+}
+function nextHigherIndex(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] > arr[0]) {
+      return i;
+    }
+  }
+  return null;
+}
+sameBSTs(
+[3, 5, 4, 6, 1, 0, 2],
+[3, 1, 5, 2, 4, 6, 0]
+);
+// true
+```
